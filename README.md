@@ -109,6 +109,3 @@ The server will run on `http://localhost:3003` (or the port specified in the env
 - `DATABASE_URL`: URL to your MySQL database. Example: `mysql://user:password@localhost:3306/dbname`
 - `PORT`: Port number for the server (optional).
 
-## License
-
-This project is licensed under the MIT License.

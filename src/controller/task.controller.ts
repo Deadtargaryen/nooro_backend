@@ -13,21 +13,35 @@ export const getTasks = async (req: Request, res: Response) => {
 };
 
 // POST /tasks: Add a new task
-export const addTask = async (req: Request, res: Response) => {
+export const addTask = async (req: Request, res: Response): Promise<void> => {
   const { title, color } = req.body;
+
+  // Validate the required fields
+  if (!title || typeof title !== 'string' || title.trim() === '') {
+    res.status(400).json({ error: "Title is required and must be a non-empty string." });
+  }
+
+  const validColors = ["red", "orange", "yellow", "green", "blue", "purple", "pink", "brown"];
+  if (color && !validColors.includes(color)) {
+    res.status(400).json({ error: `Invalid color. Valid colors are: ${validColors.join(', ')}` });
+  }
+
   try {
+  
     const newTask = await prisma.task.create({
       data: {
-        title,
-        color: color || "blue", // Default color
+        title: title.trim(),
+        color: color || "blue",
       },
     });
+    
     res.status(201).json(newTask);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "An error occurred while creating the task." });
   }
 };
+
 
 // PUT /tasks/:id: Update a task
 export const updateTask = async (req: Request, res: Response) => {
